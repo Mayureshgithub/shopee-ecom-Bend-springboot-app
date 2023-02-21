@@ -37,7 +37,7 @@ stage('Pushing to ECR') {
  stage('K8S Deploy') {
         steps{   
             script {
-                withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'k8s', namespace: '', restrictKubeConfigAccess: false, serverUrl: '')  {
+                withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'kube8', namespace: '', restrictKubeConfigAccess: false, serverUrl: '')  {
            sh ('kubectl apply -f  eks-deploy-k8s.yaml')
                 }
             }
