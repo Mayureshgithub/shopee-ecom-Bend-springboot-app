@@ -4,7 +4,7 @@ pipeline {
     }
    agent any
    environment {
-        registry = "925485789535.dkr.ecr.us-east-1.amazonaws.com/myprivaterepo"
+        registry = "public.ecr.aws/u0n4u2h5/mac-application"
     }
    stages {
     stage ('PULL'){
