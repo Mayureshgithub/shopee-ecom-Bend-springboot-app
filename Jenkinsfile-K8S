@@ -1,47 +1,41 @@
-pipeline {
-    tools {
-        maven 'maven'
+pipeline{
+ tools{
+        maven 'Maven3'
     }
-   agent any
-   environment {
-        registry = "public.ecr.aws/u0n4u2h5/mac-application"
-    }
-   stages {
-    stage ('PULL'){
-        steps {
-           checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Mayureshgithub/ecom-Bend-springboot-app.git']])
-           sh 'ls'
-        }
-    }
-
-stage('Build'){
-  steps{
-  sh  "mvn clean install"
-  }
- }
- stage('DockerBuild'){
-  steps{
-    script{
-         docker.build registry  
-     }
-  }
+agent any
+environment{
+    registry = "public.ecr.aws/u0n4u2h5/mac-application"
 }
-stage('Pushing to ECR') {
-     steps{  
-         script {
-                sh 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 925485789535.dkr.ecr.us-east-1.amazonaws.com'
-                sh 'docker push 925485789535.dkr.ecr.us-east-1.amazonaws.com/myprivaterepo:latest'
+stages {
+      stage('checkout code'){
+         steps {
+             checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Mayureshgithub/shopee-ecom-Bend-springboot-app.git']])
          }
-        }
- }
- stage('K8S Deploy') {
-        steps{   
-            script {
-                withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'kube8', namespace: '', restrictKubeConfigAccess: false, serverUrl: '')  {
-           sh ('kubectl apply -f  eks-deploy-k8s.yaml')
+     }
+     stage('build code'){
+         steps{
+             sh 'mvn clean install'
+         }
+     }
+     stage('build dockrt file'){
+          steps{
+                script{
+                    docker image = docker.build registry
                 }
-            }
-        }
-   }
-}
+          }
+     }
+     stage ('push to ecr'){
+         steps {
+             sh "aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/u0n4u2h5"
+             sh " docker push public.ecr.aws/u0n4u2h5/mac-application:latest"
+         }
+     }
+      stage ('deploy to eks'){
+           steps {
+                withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: '113ae80b-00fb-41ec-818b-5fff32496d6f', namespace: '', restrictKubeConfigAccess: false, serverUrl: '') {
+                    sh ('kubectl apply -f  eks-deploy-k8s.yaml')
+      }
+      }
+      }
+  }
 }
