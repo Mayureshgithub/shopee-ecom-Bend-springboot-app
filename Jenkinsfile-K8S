@@ -9,7 +9,7 @@ environment{
 stages {
       stage('checkout code'){
          steps {
-             checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Mayureshgithub/shopee-ecom-Bend-springboot-app.git']])
+             checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Mayureshgithub/shopee-ecom-Bend-springboot-app.git']]) 
          }
      }
      stage('build code'){
@@ -32,7 +32,7 @@ stages {
      }
       stage ('deploy to eks'){
            steps {
-                withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: '113ae80b-00fb-41ec-818b-5fff32496d6f', namespace: '', restrictKubeConfigAccess: false, serverUrl: '') {
+                withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: '', contextName: '', credentialsId: 'newkube', namespace: '', serverUrl: '']]){
                     sh ('kubectl apply -f  eks-deploy-k8s.yaml')
       }
       }
