@@ -22,7 +22,6 @@ spec:
         - containerPort: 8085
           name: http
           protocol: TCP
-          imagePullPolicy: Always
       imagePullSecrets:
       - name: ecr-secret
       
