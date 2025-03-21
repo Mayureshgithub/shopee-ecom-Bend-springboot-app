@@ -18,21 +18,21 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 8085
-# service type loadbalancer       
----
+
 apiVersion: v1
 kind: Service
 metadata:
+  name: my-app-service
   labels:
     app: springboot-app
     k8s-app: springboot-app
-  name: springboot-app
 spec:
-  ports:
-  - name: http
-    port: 80
-    protocol: TCP
-    targetPort: 8085
-  type: LoadBalancer
+  type: NodePort
   selector:
-    app: springboot-app
+    app: springboot-app  # Match this with your deployment labels
+  ports:
+    - protocol: TCP
+      port: 80       # Service port inside the cluster
+      targetPort: 8085  # Port on which the application runs inside the container
+      nodePort: 30007       
+
