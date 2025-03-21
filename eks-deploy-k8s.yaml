@@ -41,7 +41,8 @@ spec:
   #- name: http
   ports: 
   - protocol: TCP
-    port: 80       # Internal service port
+    port: 8085      # Internal service port
     targetPort: 8080  # Port your app is running on inside the container
-    nodePort: 30007 
+    nodePort: 30007
+ 
     
