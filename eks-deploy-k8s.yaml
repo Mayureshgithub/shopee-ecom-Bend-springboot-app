@@ -24,6 +24,7 @@ spec:
           protocol: TCP
       imagePullSecrets:
       - name: ecr-secret
+      imagePullPolicy: Always
 # service type loadbalancer       
 ---
 apiVersion: v1
