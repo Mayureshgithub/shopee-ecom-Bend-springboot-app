@@ -33,16 +33,14 @@ metadata:
   labels:
     app: springboot-app
     k8s-app: springboot-app
-    name: springboot-app
+  name: springboot-app
 spec:
-  type: NodePort
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 8085
+  type: LoadBalancer
   selector:
     app: springboot-app
-  #- name: http
-  ports: 
-  - protocol: TCP
-    port: 8085      # Internal service port
-    targetPort: 8080  # Port your app is running on inside the container
-    nodePort: 30007
- 
     
